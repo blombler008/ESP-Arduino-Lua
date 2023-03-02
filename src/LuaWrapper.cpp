@@ -23,7 +23,7 @@ extern "C" {
   }
 } 
 
-LuaWrapper::LuaWrapper() {
+LuaWrapper::LuaWrapper() { 
   _state = luaL_newstate();
   luaopen_base(_state);
   luaopen_table(_state);
@@ -36,6 +36,18 @@ String LuaWrapper::Lua_dostring(const String *script) {
   String scriptWithConstants = addConstants() + *script;
   String result;
   if (luaL_dostring(_state, scriptWithConstants.c_str())) {
+    result += "# lua error:\n" + String(lua_tostring(_state, -1));
+    lua_pop(_state, 1);
+  }
+  return result;
+}
+
+String LuaWrapper::Lua_doFile(const char *file) { 
+  String result;
+  String filename = String("/littlefs");
+  filename.concat(file);
+
+  if (luaL_dofile(_state, filename.c_str())) {
     result += "# lua error:\n" + String(lua_tostring(_state, -1));
     lua_pop(_state, 1);
   }
