@@ -13,6 +13,7 @@ class LuaWrapper {
     String Lua_dostring(const String *script);
     String Lua_doFile(const char *file);
     void Lua_register(const String name, const lua_CFunction function);
+    lua_State* L();
 
   private:
     lua_State *_state;

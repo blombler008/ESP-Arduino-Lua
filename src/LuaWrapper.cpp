@@ -23,6 +23,10 @@ extern "C" {
   }
 } 
 
+lua_State* LuaWrapper::L() {
+  return _state;
+}
+
 LuaWrapper::LuaWrapper() { 
   _state = luaL_newstate();
   luaopen_base(_state);
