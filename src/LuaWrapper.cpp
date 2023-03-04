@@ -38,7 +38,12 @@ extern "C" {
     
   static int lua_wrapper_delay(lua_State *lua_state) {
     int a = luaL_checkinteger(lua_state, 1);
-    delay(a);
+    long time = esp_timer_get_time();
+    long next = time + a*1000;
+    while(time < next) {
+      time = esp_timer_get_time();
+      portYIELD();
+    }
     return 0;
   }
 
